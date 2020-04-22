@@ -1,20 +1,22 @@
 <template>
   <div class="today">
-    <h1>{{greeting}}</h1>
-    <!-- <h2>Today is {{new Date().toLocaleString()}}</h2> -->
-    <div class="source">
+    <h1>Buna 👋</h1>
+    <div class="source" v-if="symptoms.length">
       <el-row :gutter="12">
-        <el-col :xs="24" :sm="24" :md="12" :lg="8">
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" v-if="fatigueSymptoms.length">
           <symptom-card :symptoms="fatigueSymptoms" type="fatigue" @update="saveData"></symptom-card>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="8">
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" v-if="feverSymptoms.length">
           <symptom-card :symptoms="feverSymptoms" type="fever" @update="saveData"></symptom-card>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="8">
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" v-if="coughSymptoms.length">
           <symptom-card :symptoms="coughSymptoms" type="cough" @update="saveData"></symptom-card>
         </el-col>
       </el-row>
     </div>
+    <h3 v-else>
+      Cum te simti azi?
+    </h3>
   </div>
 </template>
 
@@ -32,15 +34,6 @@ export default {
     };
   },
   computed: {
-    greeting() {
-      if (new Date().getHours() < 12) {
-        return "Buna dimineata 🌤";
-      } else if (new Date().getHours() < 17) {
-        return "Buna 👋";
-      } else {
-        return "Buna seara 🌕";
-      }
-    },
     fatigueSymptoms() {
       return this.symptoms.filter(s => s.type === "fatigue");
     },
@@ -53,7 +46,7 @@ export default {
   },
   methods: {
     get(key) {
-      return JSON.parse(localStorage.getItem(key));
+      return JSON.parse(localStorage.getItem(key)) || [];
     },
     set(key, newSymptoms) {
       localStorage.setItem(key, JSON.stringify(newSymptoms));
@@ -75,8 +68,7 @@ export default {
     }
   },
   mounted() {
-    this.symptoms = JSON.parse(localStorage.getItem("c19st"));
-    console.log(this.symptoms);
+    this.symptoms = this.get("c19st");
   }
 };
 </script>
