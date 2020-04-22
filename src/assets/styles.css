@@ -1,0 +1,8 @@
+.action-btns {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+.el-dialog__body {
+    padding-top: 0;
+}
