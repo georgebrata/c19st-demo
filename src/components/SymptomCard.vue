@@ -32,10 +32,7 @@ export default {
     symptoms: {
       type: Array,
       required: true,
-      default: () => {}
-      //   validator: symptom => {
-      //     return symptom.value && symptom.label;
-      //   }
+      default: () => []
     }
   },
   computed: {

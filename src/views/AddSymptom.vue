@@ -24,16 +24,9 @@ export default {
   data() {
     return {
       symptomType: "fatigue",
-      symptoms: []
     };
   },
   methods: {
-    get(key) {
-      return JSON.parse(localStorage.getItem(key)) || [];
-    },
-    set(key, newSymptoms) {
-      localStorage.setItem(key, JSON.stringify(newSymptoms));
-    },
     saveData(newSymptom) {
       let payload = {
         type: newSymptom.type,
@@ -41,8 +34,7 @@ export default {
         date: new Date()
       };
 
-      this.symptoms.push(payload);
-      this.set("c19st", this.symptoms);
+      this.$store.commit("addSymptom", payload);
 
       this.$message({
         message: "Simptom adaugat cu success!",
@@ -53,10 +45,6 @@ export default {
     cancel() {
       this.$router.push("/");
     }
-  },
-  mounted() {
-    this.symptoms = this.get("c19st");
-    console.log(this.symptoms);
   }
 };
 </script>

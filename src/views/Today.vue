@@ -1,6 +1,6 @@
 <template>
   <div class="today">
-    <h1>Buna 👋</h1>
+    <h1>Buna, {{nume}} 👋</h1>
     <div class="source" v-if="symptoms.length">
       <el-row :gutter="12">
         <el-col :xs="24" :sm="24" :md="12" :lg="8" v-if="fatigueSymptoms.length">
@@ -14,9 +14,7 @@
         </el-col>
       </el-row>
     </div>
-    <h3 v-else>
-      Cum te simti azi?
-    </h3>
+    <h3 v-else>Cum te simti azi?</h3>
   </div>
 </template>
 
@@ -29,28 +27,25 @@ export default {
   components: { SymptomCard },
   data() {
     return {
-      name: "George",
-      symptoms: []
+      nume: 'George', 
+      symptoms: this.$store.state.symptoms
     };
   },
   computed: {
     fatigueSymptoms() {
-      return this.symptoms.filter(s => s.type === "fatigue");
+      return this.$store.getters.fatigueSymptoms;
     },
     feverSymptoms() {
-      return this.symptoms.filter(s => s.type === "fever");
+      return this.$store.getters.feverSymptoms;
     },
     coughSymptoms() {
-      return this.symptoms.filter(s => s.type === "cough");
+      return this.$store.getters.coughSymptoms;
+    },
+    vuexSymptoms() {
+      return this.$store.state.symptoms;
     }
   },
   methods: {
-    get(key) {
-      return JSON.parse(localStorage.getItem(key)) || [];
-    },
-    set(key, newSymptoms) {
-      localStorage.setItem(key, JSON.stringify(newSymptoms));
-    },
     saveData(newSymptom) {
       let payload = {
         type: newSymptom.type,
@@ -58,8 +53,7 @@ export default {
         date: new Date()
       };
 
-      this.symptoms.push(payload);
-      this.set(this.symptoms);
+      this.$store.commit('addSymptom', payload)
 
       this.$message({
         message: "Simptom adaugat cu success!",
@@ -68,7 +62,7 @@ export default {
     }
   },
   mounted() {
-    this.symptoms = this.get("c19st");
+    this.symptoms = this.$store.state.symptoms;
   }
 };
 </script>
